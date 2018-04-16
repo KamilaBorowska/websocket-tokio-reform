@@ -1,8 +1,5 @@
 language: rust
-rust:
-  - stable
-  - beta
-  - nightly
+rust: nightly
 
 script:
   - ./scripts/build-all.sh
