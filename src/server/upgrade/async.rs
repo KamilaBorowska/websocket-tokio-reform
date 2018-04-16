@@ -30,6 +30,7 @@ use client::async::ClientNew;
 /// # Example
 ///
 /// ```rust,no_run
+/// # extern crate websocket_tokio_reform as websocket;
 /// use websocket::async::{Core, TcpListener, TcpStream};
 /// use websocket::async::futures::{Stream, Future};
 /// use websocket::async::server::upgrade::IntoWs;
@@ -157,6 +158,7 @@ impl<S> WsUpgrade<S, BytesMut>
 /// # Example
 ///
 /// ```rust,no_run
+/// # extern crate websocket_tokio_reform as websocket;
 /// use websocket::async::{Core, TcpListener, TcpStream};
 /// use websocket::async::futures::{Stream, Future};
 /// use websocket::async::server::upgrade::IntoWs;

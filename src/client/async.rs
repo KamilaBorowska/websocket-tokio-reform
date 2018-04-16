@@ -16,7 +16,7 @@
 //! ```rust,no_run
 //! # extern crate tokio_core;
 //! # extern crate futures;
-//! # extern crate websocket;
+//! # extern crate websocket_tokio_reform as websocket;
 //! use websocket::ClientBuilder;
 //! use websocket::async::client::{Client, ClientNew};
 //! use websocket::async::TcpStream;

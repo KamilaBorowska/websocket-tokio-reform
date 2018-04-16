@@ -255,6 +255,7 @@ impl OwnedMessage {
 	/// Checks if this message is a close message.
 	///
 	///```rust
+	///# extern crate websocket_tokio_reform as websocket;
 	///# use websocket::OwnedMessage;
 	///assert!(OwnedMessage::Close(None).is_close());
 	///```
@@ -269,6 +270,7 @@ impl OwnedMessage {
 	/// Control messages are either `Close`, `Ping`, or `Pong`.
 	///
 	///```rust
+	///# extern crate websocket_tokio_reform as websocket;
 	///# use websocket::OwnedMessage;
 	///assert!(OwnedMessage::Ping(vec![]).is_control());
 	///assert!(OwnedMessage::Pong(vec![]).is_control());
@@ -287,6 +289,7 @@ impl OwnedMessage {
 	/// Data messages are either `Text` or `Binary`.
 	///
 	///```rust
+	///# extern crate websocket_tokio_reform as websocket;
 	///# use websocket::OwnedMessage;
 	///assert!(OwnedMessage::Text("1337".to_string()).is_data());
 	///assert!(OwnedMessage::Binary(vec![]).is_data());
@@ -300,6 +303,7 @@ impl OwnedMessage {
 	/// response.
 	///
 	///```rust
+	///# extern crate websocket_tokio_reform as websocket;
 	///# use websocket::OwnedMessage;
 	///assert!(OwnedMessage::Ping("ping".to_string().into_bytes()).is_ping());
 	///```
@@ -314,6 +318,7 @@ impl OwnedMessage {
 	/// `Pong` messages are usually sent only in response to `Ping` messages.
 	///
 	///```rust
+	///# extern crate websocket_tokio_reform as websocket;
 	///# use websocket::OwnedMessage;
 	///assert!(OwnedMessage::Pong("pong".to_string().into_bytes()).is_pong());
 	///```

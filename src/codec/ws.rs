@@ -158,7 +158,7 @@ impl<D> Encoder for DataFrameCodec<D>
 ///```rust
 ///# extern crate tokio_core;
 ///# extern crate tokio_io;
-///# extern crate websocket;
+///# extern crate websocket_tokio_reform as websocket;
 ///# extern crate hyper;
 ///# use std::io::{self, Cursor};
 ///use websocket::async::{MessageCodec, MsgCodecCtx};

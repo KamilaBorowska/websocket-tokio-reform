@@ -38,7 +38,7 @@ pub use receiver::Reader;
 ///# Connecting to a Server
 ///
 ///```no_run
-///extern crate websocket;
+///extern crate websocket_tokio_reform as websocket;
 ///# fn main() {
 ///
 ///use websocket::{ClientBuilder, Message};
@@ -157,6 +157,7 @@ impl<S> Client<S>
 	/// Reads a single message from this receiver.
 	///
 	/// ```rust,no_run
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// use websocket::{ClientBuilder, Message};
 	/// let mut client = ClientBuilder::new("ws://localhost:3000")
 	///     .unwrap()
@@ -183,6 +184,7 @@ impl<S> Client<S>
 	/// can get complicated, especially if some protocols depend on others, etc.
 	///
 	/// ```rust,no_run
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// let mut client = ClientBuilder::new("wss://test.fysh.in").unwrap()
 	///     .add_protocol("xmpp")
@@ -213,6 +215,7 @@ impl<S> Client<S>
 	/// Useful to be able to set options on the stream.
 	///
 	/// ```rust,no_run
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// let mut client = ClientBuilder::new("ws://double.down").unwrap()
 	///     .connect_insecure()
@@ -228,6 +231,7 @@ impl<S> Client<S>
 	/// This can be used to write custom extensions.
 	///
 	/// ```rust,no_run
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// use websocket::Message;
 	/// use websocket::ws::sender::Sender as SenderTrait;
@@ -256,6 +260,7 @@ impl<S> Client<S>
 	/// are read in.
 	///
 	/// ```rust,no_run
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// use std::io::Cursor;
 	/// use websocket::ws::receiver::Receiver as ReceiverTrait;
@@ -294,7 +299,7 @@ impl<S> Client<S>
 	/// Returns an iterator over incoming messages.
 	///
 	///```no_run
-	///# extern crate websocket;
+	///# extern crate websocket_tokio_reform as websocket;
 	///# fn main() {
 	///use websocket::ClientBuilder;
 	///
@@ -312,7 +317,7 @@ impl<S> Client<S>
 	/// `Receiver` to be able to send messages within an iteration.
 	///
 	///```no_run
-	///# extern crate websocket;
+	///# extern crate websocket_tokio_reform as websocket;
 	///# fn main() {
 	///use websocket::ClientBuilder;
 	///
@@ -340,7 +345,7 @@ impl<S> Client<S>
 	/// This allows the Sender and Receiver to be sent to different threads.
 	///
 	///```no_run
-	///# extern crate websocket;
+	///# extern crate websocket_tokio_reform as websocket;
 	///# fn main() {
 	///use std::thread;
 	///use websocket::{ClientBuilder, Message};

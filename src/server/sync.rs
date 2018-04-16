@@ -45,7 +45,7 @@ impl<S> WsServer<S, TcpListener>
 	/// blocking when there are no incoming connections.
 	///
 	///```no_run
-	/// # extern crate websocket;
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::sync::Server;
 	/// # fn main() {
 	/// // Suppose we have to work in a single thread, but want to
@@ -100,7 +100,7 @@ impl WsServer<TlsAcceptor, TcpListener> {
 	///
 	/// # Secure Servers
 	/// ```no_run
-	/// extern crate websocket;
+	/// extern crate websocket_tokio_reform as websocket;
 	/// extern crate native_tls;
 	/// # fn main() {
 	/// use std::thread;
@@ -199,7 +199,7 @@ impl WsServer<NoTlsAcceptor, TcpListener> {
 	/// # Non-secure Servers
 	///
 	/// ```no_run
-	/// extern crate websocket;
+	/// extern crate websocket_tokio_reform as websocket;
 	/// # fn main() {
 	/// use std::thread;
 	/// use websocket::Message;

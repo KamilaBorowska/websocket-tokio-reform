@@ -1,13 +1,13 @@
 [package]
-name = "websocket"
-version = "0.20.2"
-authors = ["cyderize <admin@cyderize.org>", "Michael Eden <themichaeleden@gmail.com>"]
+name = "websocket-tokio-reform"
+version = "0.1.0"
+authors = ["cyderize <admin@cyderize.org>", "Michael Eden <themichaeleden@gmail.com>", "Konrad Borowski <websocket@borowski.pw>"]
 
-description = "A WebSocket (RFC6455) library for Rust."
+description = "websocket library updated for depreciation of tokio-core crate."
 
-documentation = "http://cyderize.github.io/rust-websocket/doc/websocket/"
+documentation = "https://docs.rs/websocket-tokio-reform/"
 homepage = "http://cyderize.github.io/rust-websocket/"
-repository = "https://github.com/cyderize/rust-websocket.git"
+repository = "https://github.com/xfix/websocket-tokio-reform.git"
 
 readme = "README.md"
 

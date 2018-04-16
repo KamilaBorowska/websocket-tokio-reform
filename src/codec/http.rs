@@ -27,7 +27,7 @@ use bytes::BufMut;
 ///```rust,no_run
 ///# extern crate tokio_core;
 ///# extern crate tokio_io;
-///# extern crate websocket;
+///# extern crate websocket_tokio_reform as websocket;
 ///# extern crate hyper;
 ///use websocket::async::HttpClientCodec;
 ///# use websocket::async::futures::{Future, Sink, Stream};
@@ -128,7 +128,7 @@ impl Decoder for HttpClientCodec {
 ///```rust,no_run
 ///# extern crate tokio_core;
 ///# extern crate tokio_io;
-///# extern crate websocket;
+///# extern crate websocket_tokio_reform as websocket;
 ///# extern crate hyper;
 ///# use std::io;
 ///use websocket::async::HttpServerCodec;

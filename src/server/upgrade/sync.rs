@@ -122,6 +122,7 @@ impl<S, B> WsUpgrade<S, B>
 /// # Example
 ///
 /// ```rust,no_run
+/// # extern crate websocket_tokio_reform as websocket;
 /// use std::net::TcpListener;
 /// use std::net::TcpStream;
 /// use websocket::sync::server::upgrade::IntoWs;
@@ -222,7 +223,7 @@ impl<S> IntoWs for RequestStreamPair<S>
 ///
 /// ```rust,no_run
 /// # extern crate hyper;
-/// # extern crate websocket;
+/// # extern crate websocket_tokio_reform as websocket;
 /// # fn main() {
 /// use hyper::server::{Server, Request, Response};
 /// use websocket::Message;

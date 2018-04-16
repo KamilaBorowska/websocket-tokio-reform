@@ -1,4 +1,4 @@
-extern crate websocket;
+extern crate websocket_tokio_reform as websocket;
 extern crate futures;
 extern crate tokio_core;
 

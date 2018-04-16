@@ -1,4 +1,4 @@
-extern crate websocket;
+extern crate websocket_tokio_reform as websocket;
 
 use websocket::ClientBuilder;
 use websocket::OwnedMessage;

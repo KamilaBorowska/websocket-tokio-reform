@@ -62,6 +62,7 @@ use self::async_imports::*;
 /// The easiest way to connect is like this:
 ///
 /// ```rust,no_run
+/// # extern crate websocket_tokio_reform as websocket;
 /// use websocket::ClientBuilder;
 ///
 /// let client = ClientBuilder::new("ws://myapp.com")
@@ -73,6 +74,7 @@ use self::async_imports::*;
 /// But there are so many more possibilities:
 ///
 /// ```rust,no_run
+/// # extern crate websocket_tokio_reform as websocket;
 /// use websocket::ClientBuilder;
 /// use websocket::header::{Headers, Cookie};
 ///
@@ -114,6 +116,7 @@ impl<'u> ClientBuilder<'u> {
 	/// because there is no need to parse this will never error.
 	///
 	/// ```rust
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// use websocket::url::Url;
 	///
@@ -138,6 +141,7 @@ impl<'u> ClientBuilder<'u> {
 	/// used in the case of `wss://`.
 	///
 	/// ```rust
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// let builder = ClientBuilder::new("wss://mycluster.club");
 	/// ```
@@ -160,6 +164,7 @@ impl<'u> ClientBuilder<'u> {
 	/// given a list of these protocols and will send back the ones it accepts.
 	///
 	/// ```rust
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// # use websocket::header::WebSocketProtocol;
 	/// let builder = ClientBuilder::new("wss://my-twitch-clone.rs").unwrap()
@@ -182,6 +187,7 @@ impl<'u> ClientBuilder<'u> {
 	/// This can take many kinds of iterators.
 	///
 	/// ```rust
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// # use websocket::header::WebSocketProtocol;
 	/// let builder = ClientBuilder::new("wss://my-twitch-clone.rs").unwrap()
@@ -220,6 +226,7 @@ impl<'u> ClientBuilder<'u> {
 	/// implementation. Support is coming soon though.
 	///
 	/// ```rust
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// # use websocket::header::{WebSocketExtensions};
 	/// # use websocket::header::extensions::Extension;
@@ -245,6 +252,7 @@ impl<'u> ClientBuilder<'u> {
 	/// still use them by using their own implementation. Support is coming soon though.
 	///
 	/// ```rust
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// # use websocket::header::{WebSocketExtensions};
 	/// # use websocket::header::extensions::Extension;
@@ -334,6 +342,7 @@ impl<'u> ClientBuilder<'u> {
 	/// the process here is more manual.
 	///
 	/// ```rust
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// # use websocket::header::{Headers, Authorization};
 	/// let mut headers = Headers::new();
@@ -375,6 +384,7 @@ impl<'u> ClientBuilder<'u> {
 	/// parameter to configure those.
 	///
 	/// ```rust,no_run
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// # use websocket::Message;
 	/// let mut client = ClientBuilder::new("wss://supersecret.l33t").unwrap()
@@ -408,6 +418,7 @@ impl<'u> ClientBuilder<'u> {
 	/// (since SSL streams cannot be cloned).
 	///
 	/// ```rust,no_run
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// let mut client = ClientBuilder::new("wss://supersecret.l33t").unwrap()
 	///     .connect_insecure()
@@ -446,6 +457,7 @@ impl<'u> ClientBuilder<'u> {
 	///  - SSH
 	///
 	/// ```rust
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// # use websocket::ClientBuilder;
 	/// use websocket::sync::stream::ReadWritePair;
 	/// use std::io::Cursor;
@@ -502,7 +514,7 @@ impl<'u> ClientBuilder<'u> {
 	/// # extern crate rand;
 	/// # extern crate tokio_core;
 	/// # extern crate futures;
-	/// # extern crate websocket;
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// use websocket::ClientBuilder;
 	/// use websocket::futures::{Future, Stream, Sink};
 	/// use websocket::Message;
@@ -596,7 +608,7 @@ impl<'u> ClientBuilder<'u> {
 	/// ```rust
 	/// # extern crate tokio_core;
 	/// # extern crate futures;
-	/// # extern crate websocket;
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// use websocket::ClientBuilder;
 	/// use websocket::futures::{Future, Stream, Sink};
 	/// use websocket::Message;
@@ -668,7 +680,7 @@ impl<'u> ClientBuilder<'u> {
 	/// ```rust,no_run
 	/// # extern crate tokio_core;
 	/// # extern crate futures;
-	/// # extern crate websocket;
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// use websocket::ClientBuilder;
 	/// use websocket::futures::{Future, Stream, Sink};
 	/// use websocket::Message;
@@ -722,6 +734,7 @@ impl<'u> ClientBuilder<'u> {
 	/// # Example
 	///
 	/// ```rust
+	/// # extern crate websocket_tokio_reform as websocket;
 	/// use websocket::header::WebSocketProtocol;
 	/// use websocket::ClientBuilder;
 	/// use websocket::sync::stream::ReadWritePair;
