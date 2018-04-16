@@ -8,12 +8,12 @@ use result::WebSocketResult;
 
 /// A trait for WebSocket messages
 pub trait Message: Sized {
-	/// Writes this message to the writer
-	fn serialize(&self, &mut Write, masked: bool) -> WebSocketResult<()>;
+    /// Writes this message to the writer
+    fn serialize(&self, &mut Write, masked: bool) -> WebSocketResult<()>;
 
-	/// Returns how many bytes this message will take up
-	fn message_size(&self, masked: bool) -> usize;
+    /// Returns how many bytes this message will take up
+    fn message_size(&self, masked: bool) -> usize;
 
-	/// Attempt to form a message from a series of data frames
-	fn from_dataframes<D: DataFrameable>(frames: Vec<D>) -> WebSocketResult<Self>;
+    /// Attempt to form a message from a series of data frames
+    fn from_dataframes<D: DataFrameable>(frames: Vec<D>) -> WebSocketResult<Self>;
 }

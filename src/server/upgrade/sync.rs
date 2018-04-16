@@ -2,8 +2,8 @@
 //! WebSocket client.
 use std::io;
 use std::net::TcpStream;
-use stream::sync::{Stream, AsTcpStream};
-use server::upgrade::{Request, WsUpgrade, HyperIntoWsError, validate};
+use stream::sync::{AsTcpStream, Stream};
+use server::upgrade::{validate, HyperIntoWsError, Request, WsUpgrade};
 use client::sync::Client;
 
 use hyper::status::StatusCode;
@@ -22,14 +22,14 @@ use hyper::net::NetworkStream;
 /// A slice of valid data in this buffer can be obtained by: `&buf[pos..cap]`.
 #[derive(Debug)]
 pub struct Buffer {
-	/// the contents of the buffered stream data
-	pub buf: Vec<u8>,
-	/// the current position of cursor in the buffer
-	/// Any data before `pos` has already been read and parsed.
-	pub pos: usize,
-	/// the last location of valid data
-	/// Any data after `cap` is not valid.
-	pub cap: usize,
+    /// the contents of the buffered stream data
+    pub buf: Vec<u8>,
+    /// the current position of cursor in the buffer
+    /// Any data before `pos` has already been read and parsed.
+    pub pos: usize,
+    /// the last location of valid data
+    /// Any data after `cap` is not valid.
+    pub cap: usize,
 }
 
 /// If you have your requests separate from your stream you can use this struct
@@ -45,66 +45,68 @@ pub type Upgrade<S> = WsUpgrade<S, Option<Buffer>>;
 /// These methods are the synchronous ways of accepting and rejecting a websocket
 /// handshake.
 impl<S> WsUpgrade<S, Option<Buffer>>
-    where S: Stream
+where
+    S: Stream,
 {
-	/// Accept the handshake request and send a response,
-	/// if nothing goes wrong a client will be created.
-	pub fn accept(self) -> Result<Client<S>, (S, io::Error)> {
-		self.internal_accept(None)
-	}
+    /// Accept the handshake request and send a response,
+    /// if nothing goes wrong a client will be created.
+    pub fn accept(self) -> Result<Client<S>, (S, io::Error)> {
+        self.internal_accept(None)
+    }
 
-	/// Accept the handshake request and send a response while
-	/// adding on a few headers. These headers are added before the required
-	/// headers are, so some might be overwritten.
-	pub fn accept_with(self, custom_headers: &Headers) -> Result<Client<S>, (S, io::Error)> {
-		self.internal_accept(Some(custom_headers))
-	}
+    /// Accept the handshake request and send a response while
+    /// adding on a few headers. These headers are added before the required
+    /// headers are, so some might be overwritten.
+    pub fn accept_with(self, custom_headers: &Headers) -> Result<Client<S>, (S, io::Error)> {
+        self.internal_accept(Some(custom_headers))
+    }
 
-	fn internal_accept(mut self, headers: Option<&Headers>) -> Result<Client<S>, (S, io::Error)> {
-		let status = self.prepare_headers(headers);
+    fn internal_accept(mut self, headers: Option<&Headers>) -> Result<Client<S>, (S, io::Error)> {
+        let status = self.prepare_headers(headers);
 
-		if let Err(e) = self.send(status) {
-			return Err((self.stream, e));
-		}
+        if let Err(e) = self.send(status) {
+            return Err((self.stream, e));
+        }
 
-		let stream = match self.buffer {
-			Some(Buffer { buf, pos, cap }) => BufReader::from_parts(self.stream, buf, pos, cap),
-			None => BufReader::new(self.stream),
-		};
+        let stream = match self.buffer {
+            Some(Buffer { buf, pos, cap }) => BufReader::from_parts(self.stream, buf, pos, cap),
+            None => BufReader::new(self.stream),
+        };
 
-		Ok(Client::unchecked(stream, self.headers, false, true))
-	}
+        Ok(Client::unchecked(stream, self.headers, false, true))
+    }
 
-	/// Reject the client's request to make a websocket connection.
-	pub fn reject(self) -> Result<S, (S, io::Error)> {
-		self.internal_reject(None)
-	}
+    /// Reject the client's request to make a websocket connection.
+    pub fn reject(self) -> Result<S, (S, io::Error)> {
+        self.internal_reject(None)
+    }
 
-	/// Reject the client's request to make a websocket connection
-	/// and send extra headers.
-	pub fn reject_with(self, headers: &Headers) -> Result<S, (S, io::Error)> {
-		self.internal_reject(Some(headers))
-	}
+    /// Reject the client's request to make a websocket connection
+    /// and send extra headers.
+    pub fn reject_with(self, headers: &Headers) -> Result<S, (S, io::Error)> {
+        self.internal_reject(Some(headers))
+    }
 
-	fn internal_reject(mut self, headers: Option<&Headers>) -> Result<S, (S, io::Error)> {
-		if let Some(custom) = headers {
-			self.headers.extend(custom.iter());
-		}
-		match self.send(StatusCode::BadRequest) {
-			Ok(()) => Ok(self.stream),
-			Err(e) => Err((self.stream, e)),
-		}
-	}
+    fn internal_reject(mut self, headers: Option<&Headers>) -> Result<S, (S, io::Error)> {
+        if let Some(custom) = headers {
+            self.headers.extend(custom.iter());
+        }
+        match self.send(StatusCode::BadRequest) {
+            Ok(()) => Ok(self.stream),
+            Err(e) => Err((self.stream, e)),
+        }
+    }
 }
 
 impl<S, B> WsUpgrade<S, B>
-    where S: Stream + AsTcpStream
+where
+    S: Stream + AsTcpStream,
 {
-	/// Get a handle to the underlying TCP stream, useful to be able to set
-	/// TCP options, etc.
-	pub fn tcp_stream(&self) -> &TcpStream {
-		self.stream.as_tcp()
-	}
+    /// Get a handle to the underlying TCP stream, useful to be able to set
+    /// TCP options, etc.
+    pub fn tcp_stream(&self) -> &TcpStream {
+        self.stream.as_tcp()
+    }
 }
 
 /// Trait to take a stream or similar and attempt to recover the start of a
@@ -143,72 +145,70 @@ impl<S, B> WsUpgrade<S, B>
 /// }
 /// ```
 pub trait IntoWs {
-	/// The type of stream this upgrade process is working with (TcpStream, etc.)
-	type Stream: Stream;
-	/// An error value in case the stream is not asking for a websocket connection
-	/// or something went wrong. It is common to also include the stream here.
-	type Error;
-	/// Attempt to parse the start of a Websocket handshake, later with the  returned
-	/// `WsUpgrade` struct, call `accept` to start a websocket client, and `reject` to
-	/// send a handshake rejection response.
-	fn into_ws(self) -> Result<Upgrade<Self::Stream>, Self::Error>;
+    /// The type of stream this upgrade process is working with (TcpStream, etc.)
+    type Stream: Stream;
+    /// An error value in case the stream is not asking for a websocket connection
+    /// or something went wrong. It is common to also include the stream here.
+    type Error;
+    /// Attempt to parse the start of a Websocket handshake, later with the  returned
+    /// `WsUpgrade` struct, call `accept` to start a websocket client, and `reject` to
+    /// send a handshake rejection response.
+    fn into_ws(self) -> Result<Upgrade<Self::Stream>, Self::Error>;
 }
 
 impl<S> IntoWs for S
-    where S: Stream
+where
+    S: Stream,
 {
-	type Stream = S;
-	type Error = (S, Option<Request>, Option<Buffer>, HyperIntoWsError);
+    type Stream = S;
+    type Error = (S, Option<Request>, Option<Buffer>, HyperIntoWsError);
 
-	fn into_ws(self) -> Result<Upgrade<Self::Stream>, Self::Error> {
-		let mut reader = BufReader::new(self);
-		let request = parse_request(&mut reader);
+    fn into_ws(self) -> Result<Upgrade<Self::Stream>, Self::Error> {
+        let mut reader = BufReader::new(self);
+        let request = parse_request(&mut reader);
 
-		let (stream, buf, pos, cap) = reader.into_parts();
-		let buffer = Some(Buffer {
-		                      buf: buf,
-		                      cap: cap,
-		                      pos: pos,
-		                  });
+        let (stream, buf, pos, cap) = reader.into_parts();
+        let buffer = Some(Buffer {
+            buf: buf,
+            cap: cap,
+            pos: pos,
+        });
 
-		let request = match request {
-			Ok(r) => r,
-			Err(e) => return Err((stream, None, buffer, e.into())),
-		};
+        let request = match request {
+            Ok(r) => r,
+            Err(e) => return Err((stream, None, buffer, e.into())),
+        };
 
-		match validate(&request.subject.0, &request.version, &request.headers) {
-			Ok(_) => {
-				Ok(WsUpgrade {
-				       headers: Headers::new(),
-				       stream: stream,
-				       request: request,
-				       buffer: buffer,
-				   })
-			}
-			Err(e) => Err((stream, Some(request), buffer, e)),
-		}
-	}
+        match validate(&request.subject.0, &request.version, &request.headers) {
+            Ok(_) => Ok(WsUpgrade {
+                headers: Headers::new(),
+                stream: stream,
+                request: request,
+                buffer: buffer,
+            }),
+            Err(e) => Err((stream, Some(request), buffer, e)),
+        }
+    }
 }
 
 impl<S> IntoWs for RequestStreamPair<S>
-    where S: Stream
+where
+    S: Stream,
 {
-	type Stream = S;
-	type Error = (S, Request, HyperIntoWsError);
+    type Stream = S;
+    type Error = (S, Request, HyperIntoWsError);
 
-	fn into_ws(self) -> Result<Upgrade<Self::Stream>, Self::Error> {
-		match validate(&self.1.subject.0, &self.1.version, &self.1.headers) {
-			Ok(_) => {
-				Ok(WsUpgrade {
-				       headers: Headers::new(),
-				       stream: self.0,
-				       request: self.1,
-				       buffer: None,
-				   })
-			}
-			Err(e) => Err((self.0, self.1, e)),
-		}
-	}
+    fn into_ws(self) -> Result<Upgrade<Self::Stream>, Self::Error> {
+        match validate(&self.1.subject.0, &self.1.version, &self.1.headers) {
+            Ok(_) => Ok(WsUpgrade {
+                headers: Headers::new(),
+                stream: self.0,
+                request: self.1,
+                buffer: None,
+            }),
+            Err(e) => Err((self.0, self.1, e)),
+        }
+    }
 }
 
 /// Upgrade a hyper connection to a websocket one.
@@ -254,34 +254,33 @@ impl<S> IntoWs for RequestStreamPair<S>
 pub struct HyperRequest<'a, 'b: 'a>(pub ::hyper::server::Request<'a, 'b>);
 
 impl<'a, 'b> IntoWs for HyperRequest<'a, 'b> {
-	type Stream = &'a mut &'b mut NetworkStream;
-	type Error = (::hyper::server::Request<'a, 'b>, HyperIntoWsError);
+    type Stream = &'a mut &'b mut NetworkStream;
+    type Error = (::hyper::server::Request<'a, 'b>, HyperIntoWsError);
 
-	fn into_ws(self) -> Result<Upgrade<Self::Stream>, Self::Error> {
-		if let Err(e) = validate(&self.0.method, &self.0.version, &self.0.headers) {
-			return Err((self.0, e));
-		}
+    fn into_ws(self) -> Result<Upgrade<Self::Stream>, Self::Error> {
+        if let Err(e) = validate(&self.0.method, &self.0.version, &self.0.headers) {
+            return Err((self.0, e));
+        }
 
-		let (_, method, headers, uri, version, reader) =
-			self.0.deconstruct();
+        let (_, method, headers, uri, version, reader) = self.0.deconstruct();
 
-		let reader = reader.into_inner();
-		let (buf, pos, cap) = reader.take_buf();
-		let stream = reader.get_mut();
+        let reader = reader.into_inner();
+        let (buf, pos, cap) = reader.take_buf();
+        let stream = reader.get_mut();
 
-		Ok(Upgrade {
-		       headers: Headers::new(),
-		       stream: stream,
-		       buffer: Some(Buffer {
-		                        buf: buf,
-		                        pos: pos,
-		                        cap: cap,
-		                    }),
-		       request: Incoming {
-		           version: version,
-		           headers: headers,
-		           subject: (method, uri),
-		       },
-		   })
-	}
+        Ok(Upgrade {
+            headers: Headers::new(),
+            stream: stream,
+            buffer: Some(Buffer {
+                buf: buf,
+                pos: pos,
+                cap: cap,
+            }),
+            request: Incoming {
+                version: version,
+                headers: headers,
+                subject: (method, uri),
+            },
+        })
+    }
 }

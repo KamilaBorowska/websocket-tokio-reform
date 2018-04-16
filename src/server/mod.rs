@@ -1,16 +1,16 @@
 //! Provides an implementation of a WebSocket server
-#[cfg(any(feature="sync-ssl", feature="async-ssl"))]
+#[cfg(any(feature = "sync-ssl", feature = "async-ssl"))]
 use native_tls::TlsAcceptor;
 
 use stream::Stream;
-use self::upgrade::{Request, HyperIntoWsError};
+use self::upgrade::{HyperIntoWsError, Request};
 
 pub mod upgrade;
 
-#[cfg(feature="async")]
+#[cfg(feature = "async")]
 pub mod async;
 
-#[cfg(feature="sync")]
+#[cfg(feature = "sync")]
 pub mod sync;
 
 /// Marker struct for a struct not being secure
@@ -22,7 +22,7 @@ pub struct NoTlsAcceptor;
 /// is running over SSL or not.
 pub trait OptionalTlsAcceptor {}
 impl OptionalTlsAcceptor for NoTlsAcceptor {}
-#[cfg(any(feature="sync-ssl", feature="async-ssl"))]
+#[cfg(any(feature = "sync-ssl", feature = "async-ssl"))]
 impl OptionalTlsAcceptor for TlsAcceptor {}
 
 /// When a sever tries to accept a connection many things can go wrong.
@@ -31,20 +31,21 @@ impl OptionalTlsAcceptor for TlsAcceptor {}
 /// websocket handshake, in case one wants to use the connection for something
 /// else (such as HTTP).
 pub struct InvalidConnection<S, B>
-	where S: Stream
+where
+    S: Stream,
 {
-	/// if the stream was successfully setup it will be included here
-	/// on a failed connection.
-	pub stream: Option<S>,
-	/// the parsed request. **This is a normal HTTP request** meaning you can
-	/// simply run this server and handle both HTTP and Websocket connections.
-	/// If you already have a server you want to use, checkout the
-	/// `server::upgrade` module to integrate this crate with your server.
-	pub parsed: Option<Request>,
-	/// the buffered data that was already taken from the stream
-	pub buffer: Option<B>,
-	/// the cause of the failed websocket connection setup
-	pub error: HyperIntoWsError,
+    /// if the stream was successfully setup it will be included here
+    /// on a failed connection.
+    pub stream: Option<S>,
+    /// the parsed request. **This is a normal HTTP request** meaning you can
+    /// simply run this server and handle both HTTP and Websocket connections.
+    /// If you already have a server you want to use, checkout the
+    /// `server::upgrade` module to integrate this crate with your server.
+    pub parsed: Option<Request>,
+    /// the buffered data that was already taken from the stream
+    pub buffer: Option<B>,
+    /// the cause of the failed websocket connection setup
+    pub error: HyperIntoWsError,
 }
 
 /// Represents a WebSocket server which can work with either normal
@@ -84,11 +85,12 @@ pub struct InvalidConnection<S, B>
 /// All it takes is implementing the `IntoWs` trait for your server's streams,
 /// then calling `.into_ws()` on them.
 /// check out the docs over at `websocket::server::upgrade::sync` for more.
-#[cfg(any(feature="sync", feature="async"))]
+#[cfg(any(feature = "sync", feature = "async"))]
 pub struct WsServer<S, L>
-	where S: OptionalTlsAcceptor
+where
+    S: OptionalTlsAcceptor,
 {
-	listener: L,
-	/// The SSL acceptor given to the server
-	pub ssl_acceptor: S,
+    listener: L,
+    /// The SSL acceptor given to the server
+    pub ssl_acceptor: S,
 }

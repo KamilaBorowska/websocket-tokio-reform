@@ -54,7 +54,7 @@ use result::WebSocketError;
 use codec::ws::MessageCodec;
 use message::OwnedMessage;
 
-#[cfg(feature="async-ssl")]
+#[cfg(feature = "async-ssl")]
 pub use tokio_tls::TlsStream;
 
 /// An asynchronous websocket client.
