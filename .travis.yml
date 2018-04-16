@@ -1,5 +1,8 @@
 language: rust
-rust: nightly
+rust:
+  - stable
+  - beta
+  - nightly
 before_script:
   - export PATH="$PATH:$HOME/.cargo/bin"
   - which rustfmt || cargo install --vers 0.8.4 rustfmt
